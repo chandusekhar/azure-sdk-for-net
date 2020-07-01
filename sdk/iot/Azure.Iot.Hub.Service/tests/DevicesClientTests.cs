@@ -184,9 +184,9 @@ namespace Azure.Iot.Hub.Service.Tests
         [Test]
         public async Task DevicesClient_BulkCreation()
         {
-            string testDeviceprefix = $"bulkDevice";
+            string testDevicePrefix = $"bulkDevice";
 
-            IEnumerable<DeviceIdentity> devices = BuildMultipleDevices(testDeviceprefix, BULK_DEVICE_COUNT);
+            IEnumerable<DeviceIdentity> devices = BuildMultipleDevices(testDevicePrefix, BULK_DEVICE_COUNT);
 
             IoTHubServiceClient client = GetClient();
 
@@ -210,7 +210,7 @@ namespace Azure.Iot.Hub.Service.Tests
         [Test]
         public async Task DevicesClient_BulkUpdate()
         {
-            string testDeviceprefix = $"bulkDeviceUpdate";
+            string testDevicePrefix = $"bulkDeviceUpdate";
 
             IoTHubServiceClient client = GetClient();
             IList<DeviceIdentity> listOfDevicesToUpdate = null;
@@ -218,22 +218,22 @@ namespace Azure.Iot.Hub.Service.Tests
             try
             {
                 // Create two devices
-                Response<DeviceIdentity> deviceOneCeateResponse = await client.Devices.CreateOrUpdateIdentityAsync(
+                Response<DeviceIdentity> deviceOneCreateResponse = await client.Devices.CreateOrUpdateIdentityAsync(
                     new DeviceIdentity
                     {
-                        DeviceId = $"{testDeviceprefix}{GetRandom()}",
+                        DeviceId = $"{testDevicePrefix}{GetRandom()}",
                         Status = DeviceStatus.Enabled,
                     }).ConfigureAwait(false);
 
-                Response<DeviceIdentity> deviceTwoCeateResponse = await client.Devices.CreateOrUpdateIdentityAsync(
+                Response<DeviceIdentity> deviceTwoCreateResponse = await client.Devices.CreateOrUpdateIdentityAsync(
                     new DeviceIdentity
                     {
-                        DeviceId = $"{testDeviceprefix}{GetRandom()}",
+                        DeviceId = $"{testDevicePrefix}{GetRandom()}",
                         Status = DeviceStatus.Enabled,
                     }).ConfigureAwait(false);
 
-                DeviceIdentity deviceOne = deviceOneCeateResponse.Value;
-                DeviceIdentity deviceTwo = deviceTwoCeateResponse.Value;
+                DeviceIdentity deviceOne = deviceOneCreateResponse.Value;
+                DeviceIdentity deviceTwo = deviceTwoCreateResponse.Value;
 
                 listOfDevicesToUpdate = new List<DeviceIdentity> { deviceOne, deviceTwo };
 
@@ -270,11 +270,11 @@ namespace Azure.Iot.Hub.Service.Tests
         [Ignore("DeviceRegistryOperationError cannot be parsed since service sends integer instead of a string")]
         public async Task DevicesClient_BulkCreation_OneAlreadyExists()
         {
-            string testDeviceprefix = $"bulkDevice";
-            string existingDeviceName = $"{testDeviceprefix}{GetRandom()}";
+            string testDevicePrefix = $"bulkDevice";
+            string existingDeviceName = $"{testDevicePrefix}{GetRandom()}";
 
             IoTHubServiceClient client = GetClient();
-            IList<DeviceIdentity> devices = BuildMultipleDevices(testDeviceprefix, BULK_DEVICE_COUNT-1);
+            IList<DeviceIdentity> devices = BuildMultipleDevices(testDevicePrefix, BULK_DEVICE_COUNT - 1);
 
             try
             {
@@ -302,7 +302,7 @@ namespace Azure.Iot.Hub.Service.Tests
         [Test]
         public async Task DevicesClient_BulkCreation_DeviceWithTwin()
         {
-            string testDeviceprefix = $"bulkDeviceWithTwin";
+            string testDevicePrefix = $"bulkDeviceWithTwin";
             string userPropertyName = "user";
             string userPropertyValue = "userA";
 
@@ -314,7 +314,7 @@ namespace Azure.Iot.Hub.Service.Tests
             };
 
             // We will build multiple devices and all of them with the same desired properties for convenience.
-            IDictionary<DeviceIdentity, TwinData> devicesAndTwins = BuildDevicesAndTwins(testDeviceprefix, BULK_DEVICE_COUNT, desiredProperties);
+            IDictionary<DeviceIdentity, TwinData> devicesAndTwins = BuildDevicesAndTwins(testDevicePrefix, BULK_DEVICE_COUNT, desiredProperties);
 
             try
             {
@@ -343,9 +343,9 @@ namespace Azure.Iot.Hub.Service.Tests
         [Test]
         public async Task DevicesClient_Query_GetTwins()
         {
-            string testDeviceprefix = $"bulkDevice";
+            string testDevicePrefix = $"bulkDevice";
 
-            IEnumerable<DeviceIdentity> devices = BuildMultipleDevices(testDeviceprefix, BULK_DEVICE_COUNT);
+            IEnumerable<DeviceIdentity> devices = BuildMultipleDevices(testDevicePrefix, BULK_DEVICE_COUNT);
 
             IoTHubServiceClient client = GetClient();
 
@@ -391,9 +391,9 @@ namespace Azure.Iot.Hub.Service.Tests
             }
         }
 
-        private IDictionary<DeviceIdentity, TwinData> BuildDevicesAndTwins(string testDeviceprefix, int deviceCount, IDictionary<string, object> desiredProperties)
+        private IDictionary<DeviceIdentity, TwinData> BuildDevicesAndTwins(string testDevicePrefix, int deviceCount, IDictionary<string, object> desiredProperties)
         {
-            IList<DeviceIdentity> devices = BuildMultipleDevices(testDeviceprefix, deviceCount);
+            IList<DeviceIdentity> devices = BuildMultipleDevices(testDevicePrefix, deviceCount);
             IDictionary<DeviceIdentity, TwinData> devicesAndTwins = new Dictionary<DeviceIdentity, TwinData>();
 
             foreach (DeviceIdentity device in devices)
@@ -404,13 +404,13 @@ namespace Azure.Iot.Hub.Service.Tests
             return devicesAndTwins;
         }
 
-        private IList<DeviceIdentity> BuildMultipleDevices(string testDeviceprefix, int deviceCount)
+        private IList<DeviceIdentity> BuildMultipleDevices(string testDevicePrefix, int deviceCount)
         {
             List<DeviceIdentity> deviceList = new List<DeviceIdentity>();
 
             for (int i = 0; i < deviceCount; i++)
             {
-                deviceList.Add(new DeviceIdentity { DeviceId = $"{testDeviceprefix}{GetRandom()}" });
+                deviceList.Add(new DeviceIdentity { DeviceId = $"{testDevicePrefix}{GetRandom()}" });
             }
 
             return deviceList;
